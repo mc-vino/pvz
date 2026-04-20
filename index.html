@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Альтернативные сценарии — 21vek Почта</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+–bg: #f5f6fa;
+–white: #fff;
+–border: #e2e6f0;
+–text: #1a1d2e;
+–muted: #7b8299;
+–blue: #3b6ff0;
+–blue-light: #eef2ff;
+–orange: #f97316;
+–orange-light: #fff7ed;
+–green: #16a34a;
+–green-light: #f0fdf4;
+–red: #dc2626;
+–red-light: #fef2f2;
+–yellow: #ca8a04;
+–yellow-light: #fefce8;
+–purple: #7c3aed;
+–purple-light: #f5f3ff;
+–shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+- { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(–bg); color: var(–text); font-family: ‘Inter’, sans-serif; font-size: 13px; }
+
+.header {
+background: var(–white);
+border-bottom: 1px solid var(–border);
+padding: 16px 20px;
+position: sticky; top: 0; z-index: 100;
+box-shadow: var(–shadow);
+display: flex; align-items: center; gap: 12px;
+}
+.logo { background: var(–blue); color: #fff; font-weight: 700; font-size: 12px; padding: 5px 10px; border-radius: 5px; }
+.header-title { font-weight: 700; font-size: 14px; }
+.header-sub { color: var(–muted); font-size: 11px; }
+.header-count { margin-left: auto; background: var(–purple-light); color: var(–purple); font-weight: 700; font-size: 12px; padding: 4px 12px; border-radius: 20px; }
+
+.content { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+
+/* STAGE BLOCK */
+.stage { margin-bottom: 32px; }
+
+.stage-header {
+display: flex; align-items: center; gap: 10px;
+margin-bottom: 12px;
+padding-bottom: 8px;
+border-bottom: 2px solid var(–border);
+}
+
+.stage-num {
+background: var(–blue); color: #fff;
+font-weight: 700; font-size: 11px;
+padding: 4px 10px; border-radius: 4px;
+white-space: nowrap;
+}
+
+.stage-title { font-weight: 700; font-size: 15px; }
+.stage-count { margin-left: auto; color: var(–muted); font-size: 11px; }
+
+/* SCENARIO CARD */
+.scenario {
+background: var(–white);
+border: 1.5px solid var(–border);
+border-radius: 10px;
+margin-bottom: 10px;
+overflow: hidden;
+box-shadow: var(–shadow);
+}
+
+.scenario-header {
+display: flex; align-items: flex-start; gap: 10px;
+padding: 12px 14px;
+cursor: pointer;
+user-select: none;
+}
+
+.scenario-header:hover { background: #fafbff; }
+
+.sc-id {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 10px; font-weight: 600;
+padding: 3px 7px; border-radius: 4px;
+white-space: nowrap; flex-shrink: 0;
+margin-top: 1px;
+}
+
+.tag-new { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+.tag-exists { background: var(–green-light); color: var(–green); border: 1px solid #86efac; }
+
+.sc-title { font-weight: 600; font-size: 13px; flex: 1; line-height: 1.4; }
+
+.sc-who {
+font-size: 10px; color: var(–muted);
+background: var(–bg); border: 1px solid var(–border);
+padding: 2px 8px; border-radius: 10px;
+white-space: nowrap; flex-shrink: 0;
+}
+
+.sc-chevron { color: var(–muted); font-size: 13px; transition: transform 0.2s; flex-shrink: 0; margin-top: 2px; }
+.sc-chevron.open { transform: rotate(90deg); }
+
+.scenario-body {
+display: none;
+border-top: 1px solid var(–border);
+}
+.scenario-body.open { display: block; }
+
+.body-inner { padding: 14px 16px; }
+
+/* CONDITION */
+.condition {
+background: var(–yellow-light);
+border: 1px solid #fde68a;
+border-radius: 7px;
+padding: 10px 12px;
+margin-bottom: 12px;
+font-size: 12px; line-height: 1.5;
+}
+.condition strong {
+display: block; color: var(–yellow);
+font-size: 10px; text-transform: uppercase;
+letter-spacing: 0.08em; margin-bottom: 3px;
+}
+
+/* COMBOS */
+.combos {
+display: flex; gap: 6px; flex-wrap: wrap;
+margin-bottom: 10px;
+}
+.combo {
+font-size: 10px; font-weight: 600;
+padding: 3px 8px; border-radius: 4px;
+border: 1px solid;
+}
+.combo-fl { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.combo-ul { background: #fdf4ff; color: #7e22ce; border-color: #e9d5ff; }
+
+/* STEPS */
+.steps { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+
+.step {
+display: flex; gap: 10px; align-items: flex-start;
+padding: 7px 10px;
+border-radius: 6px;
+background: var(–bg);
+font-size: 12px; line-height: 1.5;
+}
+
+.step-n {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 10px; font-weight: 700;
+color: var(–blue);
+min-width: 28px; flex-shrink: 0;
+padding-top: 1px;
+}
+
+.step.warn { background: #fff7ed; }
+.step.warn .step-n { color: var(–orange); }
+.step.ok { background: var(–green-light); }
+.step.ok .step-n { color: var(–green); }
+.step.err { background: var(–red-light); }
+.step.err .step-n { color: var(–red); }
+
+/* NOTE */
+.note {
+background: #fffbeb; border: 1px solid #fde68a;
+border-radius: 6px; padding: 8px 10px;
+font-size: 11px; color: #92400e;
+margin-top: 10px; line-height: 1.5;
+display: flex; gap: 6px;
+}
+
+/* TODO */
+.todo {
+background: #fdf4ff; border: 1px solid #e9d5ff;
+border-radius: 6px; padding: 8px 10px;
+font-size: 11px; color: var(–purple);
+margin-top: 10px; display: flex; gap: 6px;
+}
+
+/* FILTER BAR */
+.filters {
+display: flex; gap: 6px; flex-wrap: wrap;
+margin-bottom: 20px;
+}
+.filter-btn {
+padding: 5px 12px; border-radius: 20px;
+border: 1.5px solid var(–border);
+background: var(–white); font-family: ‘Inter’, sans-serif;
+font-size: 11px; font-weight: 600; cursor: pointer;
+transition: all 0.15s; color: var(–muted);
+}
+.filter-btn:hover { border-color: var(–blue); color: var(–blue); }
+.filter-btn.active { background: var(–blue); color: #fff; border-color: var(–blue); }
+</style>
+
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">21vek</div>
+  <div>
+    <div class="header-title">Альтернативные сценарии — Почтовый сервис</div>
+    <div class="header-sub">Все нестандартные ситуации по этапам · Кликни для раскрытия</div>
+  </div>
+  <div class="header-count">34 сценария</div>
+</div>
+
+<div class="content">
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filterAll()">Все</button>
+  <button class="filter-btn" onclick="filterStage('s1')">Приём</button>
+  <button class="filter-btn" onclick="filterStage('s2')">Подготовка к отправке</button>
+  <button class="filter-btn" onclick="filterStage('s3')">Логистика</button>
+  <button class="filter-btn" onclick="filterStage('s4')">Выдача</button>
+  <button class="filter-btn" onclick="filterStage('s5')">Возврат</button>
+  <button class="filter-btn" onclick="filterStage('s6')">Хранение</button>
+  <button class="filter-btn" onclick="filterStage('s7')">Претензии</button>
+</div>
+
+<!-- ===== ЭТАП 1: ПРИЁМ ===== -->
+
+<div class="stage" data-stage="s1">
+  <div class="stage-header">
+    <span class="stage-num">Этап 1</span>
+    <span class="stage-title">Приём посылок в ПВЗ</span>
+    <span class="stage-count">9 сценариев</span>
+  </div>
+
+  <!-- 1.1 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc1_1')">
+      <span class="sc-id tag-exists">1.1</span>
+      <span class="sc-title">Посылка без заявки (офлайн, ФЛ)</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc1_1">▶</span>
+    </div>
+    <div class="scenario-body" id="sc1_1">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>Физлицо пришло без предварительной заявки на сайте.</div>
+        <div class="combos"><span class="combo combo-fl">ФЛ → ФЛ</span><span class="combo combo-fl">ФЛ → ЮЛ</span></div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Уточнить номер мобильного телефона клиента.</li>
+          <li class="step"><span class="step-n">2</span>Открыть рабочее место в 1С → создать новую заявку.</li>
+          <li class="step"><span class="step-n">3</span>Внести данные отправителя и получателя.</li>
+          <li class="step"><span class="step-n">4</span>Взвесить и замерить посылку → внести в заявку.</li>
+          <li class="step"><span class="step-n">5</span>Зафиксировать доп. услуги при необходимости.</li>
+          <li class="step ok"><span class="step-n">→</span>Далее — основной порядок приёма с шага 3.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.2 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc1_2')">
+      <span class="sc-id tag-exists">1.2</span>
+      <span class="sc-title">ЮЛ пришло без заявки</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc1_2">▶</span>
+    </div>
+    <div class="scenario-body" id="sc1_2">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>Юридическое лицо пришло без предварительно оформленной онлайн-заявки.</div>
+        <div class="combos"><span class="combo combo-ul">ЮЛ → ФЛ</span><span class="combo combo-ul">ЮЛ → ЮЛ</span></div>
+        <ul class="steps">
+          <li class="step err"><span class="step-n">!</span>Офлайн создание заявок для ЮЛ недоступно — только онлайн по договору.</li>
+          <li class="step"><span class="step-n">1</span>Отказать в приёме посылки.</li>
+          <li class="step"><span class="step-n">2</span>Объяснить клиенту, что необходимо оформить заявку на сайте.</li>
+          <li class="step"><span class="step-n">3</span>При необходимости направить к менеджеру по сопровождению ЮЛ.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.3 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc1_3')">
+      <span class="sc-id tag-new">1.3</span>
+      <span class="sc-title">Посылка превышает лимиты веса или габаритов</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc1_3">▶</span>
+    </div>
+    <div class="scenario-body" id="sc1_3">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>При взвешивании/замере посылка превышает: вес свыше 50 кг, наибольшее измерение свыше 1050 мм или сумма длины+ширины+толщины свыше 1800 мм.</div>
+        <div class="combos"><span class="combo combo-fl">ФЛ</span><span class="combo combo-ul">ЮЛ</span></div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Сообщить клиенту о превышении лимитов, назвать конкретные значения.</li>
+          <li class="step"><span class="step-n">2</span>Предложить разбить на несколько посылок, если это возможно.</li>
+          <li class="step err"><span class="step-n">!</span>Если разбить невозможно — отказать в приёме.</li>
+          <li class="step"><span class="step-n">3</span>Скорректировать заявку или отменить, если посылка не принята.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.4 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc1_4')">
+      <span class="sc-id tag-new">1.4</span>
+      <span class="sc-title">Упаковка не соответствует требованиям / отсутствует</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc1_4">▶</span>
+    </div>
+    <div class="scenario-body" id="sc1_4">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>Посылка пришла без упаковки, в повреждённой упаковке или упаковка не соответствует характеру вложения.</div>
+        <div class="combos"><span class="combo combo-fl">ФЛ</span><span class="combo combo-ul">ЮЛ</span></div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Объяснить клиенту требования к упаковке.</li>
+          <li class="step"><span class="step-n">2</span>Предложить упаковать за доп. плату (от 0,75 до 5,5 BYN) силами ПВЗ.</li>
+          <li class="step"><span class="step-n">3а</span>Если клиент согласен — упаковать, добавить услугу в заявку, перейти к основному порядку.</li>
+          <li class="step warn"><span class="step-n">3б</span>Если клиент отказывается от платной упаковки — предложить упаковать самостоятельно и вернуться.</li>
+          <li class="step err"><span class="step-n">3в</span>Если упаковка принципиально не может быть исправлена — отказать в приёме.</li>
+        </ul>
+        <div class="note">📌 Дополнительную защитную упаковку (пузырчатая плёнка и т.д.) для «Хрупкого» — обязательно.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.5 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc1_5')">
+      <span class="sc-id tag-new">1.5</span>
+      <span class="sc-title">Подозрение на запрещённое вложение</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc1_5">▶</span>
+    </div>
+    <div class="scenario-body" id="sc1_5">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>Есть основания полагать, что в посылке содержатся запрещённые к пересылке предметы (оружие, скоропортящиеся продукты, биовещества, живые животные и т.д.).</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Сотрудник вправе отказать в приёме в одностороннем порядке.</li>
+          <li class="step"><span class="step-n">2</span>Объяснить клиенту причину отказа.</li>
+          <li class="step warn"><span class="step-n">3</span>Зафиксировать факт отказа.</li>
+        </ul>
+        <div class="todo">✏️ Уточнить: нужна ли фиксация в 1С при отказе по подозрению? Нужно ли вызывать старшего?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.6 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc1_6')">
+      <span class="sc-id tag-new">1.6</span>
+      <span class="sc-title">Данные отправителя/получателя не на русском/белорусском языке</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc1_6">▶</span>
+    </div>
+    <div class="scenario-body" id="sc1_6">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>В заявке или на адресном ярлыке данные указаны не на русском или белорусском языке.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Попросить клиента предоставить данные на русском или белорусском языке.</li>
+          <li class="step"><span class="step-n">2</span>Скорректировать данные в заявке 1С совместно с клиентом.</li>
+          <li class="step warn"><span class="step-n">3</span>Если клиент не может предоставить корректные данные — отказать в приёме.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.7 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc1_7')">
+      <span class="sc-id tag-new">1.7</span>
+      <span class="sc-title">Приём более 5 посылок одновременно</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc1_7">▶</span>
+    </div>
+    <div class="scenario-body" id="sc1_7">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>Клиент (чаще ЮЛ) сдаёт более 5 посылок за один раз.</div>
+        <div class="combos"><span class="combo combo-ul">ЮЛ</span><span class="combo combo-fl">ФЛ</span></div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Добавить услугу «Принятие свыше 5 почтовых отправлений» в заявку (0,4 BYN за каждое последующее отправление).</li>
+          <li class="step"><span class="step-n">2</span>Для ЮЛ: оформить «Список» вместо квитанции при единовременной отправке — система 1С формирует автоматически.</li>
+          <li class="step"><span class="step-n">3</span>Провести взвешивание и проверку каждой посылки.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.8 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc1_8')">
+      <span class="sc-id tag-new">1.8</span>
+      <span class="sc-title">Возврат посылки до момента отправки в Таборы</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc1_8">▶</span>
+    </div>
+    <div class="scenario-body" id="sc1_8">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>Отправитель хочет забрать посылку обратно после оформления, но до передачи водителю.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Проверить документ отправителя и сверить с данными в заявке.</li>
+          <li class="step"><span class="step-n">2</span>Вернуть посылку отправителю.</li>
+          <li class="step"><span class="step-n">3</span>Закрыть (аннулировать) заявку в 1С.</li>
+        </ul>
+        <div class="todo">✏️ Уточнить: возвращается ли оплаченная сумма полностью? Какой документ оформляется при аннулировании?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.9 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc1_9')">
+      <span class="sc-id tag-new">1.9</span>
+      <span class="sc-title">Отправитель — ЮЛ с дебиторской задолженностью</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc1_9">▶</span>
+    </div>
+    <div class="scenario-body" id="sc1_9">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>При проверке в 1С выявлена дебиторская задолженность юридического лица.</div>
+        <div class="combos"><span class="combo combo-ul">ЮЛ</span></div>
+        <ul class="steps">
+          <li class="step err"><span class="step-n">!</span>Оказание услуг ЮЛ с задолженностью приостанавливается.</li>
+          <li class="step"><span class="step-n">1</span>Отказать в приёме посылки.</li>
+          <li class="step"><span class="step-n">2</span>Сообщить клиенту о наличии задолженности, направить к менеджеру по сопровождению ЮЛ.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ЭТАП 2: ПОДГОТОВКА К ОТПРАВКЕ ===== -->
+
+<div class="stage" data-stage="s2">
+  <div class="stage-header">
+    <span class="stage-num">Этап 2</span>
+    <span class="stage-title">Подготовка посылок к отправке в Таборы</span>
+    <span class="stage-count">3 сценария</span>
+  </div>
+
+  <!-- 2.1 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc2_1')">
+      <span class="sc-id tag-new">2.1</span>
+      <span class="sc-title">Расхождение при сборе по ТСД (посылка не найдена)</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc2_1">▶</span>
+    </div>
+    <div class="scenario-body" id="sc2_1">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>При сборе посылок по ТСД одна или несколько позиций не обнаружены физически.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Провести повторный поиск посылки в зоне ПВЗ.</li>
+          <li class="step"><span class="step-n">2</span>Если не найдена — зафиксировать расхождение.</li>
+          <li class="step warn"><span class="step-n">3</span>Сформировать задачу в Битрикс.</li>
+          <li class="step"><span class="step-n">4</span>Отправить водителю имеющиеся посылки, зафиксировать расхождение в документах.</li>
+        </ul>
+        <div class="todo">✏️ Уточнить: как именно фиксируется расхождение в 1С? Нужен ли акт?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.2 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc2_2')">
+      <span class="sc-id tag-new">2.2</span>
+      <span class="sc-title">Водитель не приехал / опоздал</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc2_2">▶</span>
+    </div>
+    <div class="scenario-body" id="sc2_2">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>Водитель не прибыл в плановое время или отменил рейс.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Оставить посылки в зоне сбора до следующего рейса.</li>
+          <li class="step warn"><span class="step-n">2</span>Уведомить логистов о задержке.</li>
+          <li class="step"><span class="step-n">3</span>Проконтролировать, чтобы статус посылок в 1С не менялся до фактической передачи.</li>
+        </ul>
+        <div class="todo">✏️ Уточнить: влияет ли задержка передачи на сроки пересылки (Д+2/Д+3)? Нужно ли уведомлять отправителя?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.3 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc2_3')">
+      <span class="sc-id tag-new">2.3</span>
+      <span class="sc-title">Ошибка в ТТН / сопроводительных документах</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc2_3">▶</span>
+    </div>
+    <div class="scenario-body" id="sc2_3">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>При проверке ТТН обнаружена ошибка в данных (адрес, кол-во мест, ФИО).</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Исправить данные в 1С.</li>
+          <li class="step"><span class="step-n">2</span>Перепечатать ТТН.</li>
+          <li class="step warn"><span class="step-n">3</span>Передать водителю исправленный комплект документов — не передавать посылки по документам с ошибкой.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ЭТАП 3: ЛОГИСТИКА ===== -->
+
+<div class="stage" data-stage="s3">
+  <div class="stage-header">
+    <span class="stage-num">Этап 3</span>
+    <span class="stage-title">Логистика: ПВЗ ↔ Таборы ↔ ПВЗ/адрес</span>
+    <span class="stage-count">5 сценариев</span>
+  </div>
+
+  <!-- 3.1 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc3_1')">
+      <span class="sc-id tag-exists">3.1</span>
+      <span class="sc-title">Недовоз посылок в ПВЗ-получателя</span>
+      <span class="sc-who">Сотрудник ПВЗ + водитель</span>
+      <span class="sc-chevron" id="chv-sc3_1">▶</span>
+    </div>
+    <div class="scenario-body" id="sc3_1">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Совместно с водителем составить и подписать Акт об установленном расхождении (1 экз., хранить 1 месяц, затем утилизировать). Сделать отметку в ТТН с номером акта.</li>
+          <li class="step"><span class="step-n">2</span>Принять посылку виртуально в 1С, добавить в пересчёт.</li>
+          <li class="step"><span class="step-n">3</span>Отправить СМС получателю вручную по шаблону из системы.</li>
+          <li class="step warn"><span class="step-n">4</span>Сформировать задачу в Битрикс по шаблону «Недовоз: Таборы — ПВЗ, дата».</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.2 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc3_2')">
+      <span class="sc-id tag-exists">3.2</span>
+      <span class="sc-title">Излишек посылок в ПВЗ-получателя</span>
+      <span class="sc-who">Сотрудник ПВЗ + водитель</span>
+      <span class="sc-chevron" id="chv-sc3_2">▶</span>
+    </div>
+    <div class="scenario-body" id="sc3_2">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Совместно с водителем составить Акт об установленном расхождении, сделать отметку в ТТН.</li>
+          <li class="step"><span class="step-n">2</span>Провести пересчёт во всех статусах с указанием в комментарии кода отправления.</li>
+          <li class="step"><span class="step-n">3</span>Уведомить специалиста по работе с клиентами отдела почтовых услуг.</li>
+          <li class="step"><span class="step-n">4</span>Специалист связывается с ПВЗ, куда должна была поступить посылка, создаёт перемещение.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.3 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc3_3')">
+      <span class="sc-id tag-exists">3.3</span>
+      <span class="sc-title">Посылка поступила с браком/повреждением упаковки</span>
+      <span class="sc-who">Сотрудник ПВЗ + водитель</span>
+      <span class="sc-chevron" id="chv-sc3_3">▶</span>
+    </div>
+    <div class="scenario-body" id="sc3_3">
+      <div class="body-inner">
+        <div class="condition"><strong>Важно</strong>Даже при обнаружении повреждений — предпринять попытку выдачи получателю.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Совместно с водителем составить Акт об установленном расхождении, сделать отметку в ТТН.</li>
+          <li class="step"><span class="step-n">2</span>Принять посылку, разместить в отдельной зоне с пометкой о повреждении.</li>
+          <li class="step warn"><span class="step-n">3</span>При выдаче — действовать согласно сценарию 4.4 (выдача с браком).</li>
+        </ul>
+        <div class="todo">✏️ Уточнить полный порядок действий при браке — он обозначен как «продумать и описать».</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.4 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc3_4')">
+      <span class="sc-id tag-new">3.4</span>
+      <span class="sc-title">Нарушение сроков доставки (форс-мажор / задержка логистики)</span>
+      <span class="sc-who">Логисты / Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc3_4">▶</span>
+    </div>
+    <div class="scenario-body" id="sc3_4">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>Посылка не доставлена в срок (Д+2 для обл. центров, Д+3 для остальных). Покрывает 95% отправлений.</div>
+        <ul class="steps">
+          <li class="step warn"><span class="step-n">1</span>Логисты фиксируют задержку и устанавливают причину.</li>
+          <li class="step"><span class="step-n">2</span>Уведомить получателя об изменении сроков (СМС или звонок).</li>
+          <li class="step"><span class="step-n">3</span>При задержке по вине оператора — начисляется неустойка 1% от платы за пересылку за каждый день.</li>
+        </ul>
+        <div class="todo">✏️ Уточнить: кто уведомляет получателя — 1С автоматически или сотрудник вручную?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.5 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc3_5')">
+      <span class="sc-id tag-new">3.5</span>
+      <span class="sc-title">Потеря адресного ярлыка в процессе транспортировки</span>
+      <span class="sc-who">Сотрудник склада / ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc3_5">▶</span>
+    </div>
+    <div class="scenario-body" id="sc3_5">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Зафиксировать факт потери ярлыка, поставить заявку в рамках регламента об Инцидентах.</li>
+          <li class="step"><span class="step-n">2</span>Попытаться идентифицировать посылку по индивидуальному коду или другим данным в системе.</li>
+          <li class="step"><span class="step-n">3</span>Если идентифицировать удалось — распечатать новый ярлык из 1С.</li>
+          <li class="step warn"><span class="step-n">4</span>Если идентифицировать не удалось — передать в нерозданные.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ЭТАП 4: ВЫДАЧА ===== -->
+
+<div class="stage" data-stage="s4">
+  <div class="stage-header">
+    <span class="stage-num">Этап 4</span>
+    <span class="stage-title">Выдача посылок получателю</span>
+    <span class="stage-count">9 сценариев</span>
+  </div>
+
+  <!-- 4.1 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc4_1')">
+      <span class="sc-id tag-new">4.1</span>
+      <span class="sc-title">Клиент пришёл не в тот ПВЗ</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc4_1">▶</span>
+    </div>
+    <div class="scenario-body" id="sc4_1">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Найти посылку в системе, определить ПВЗ назначения.</li>
+          <li class="step"><span class="step-n">2</span>Сообщить адрес нужного ПВЗ.</li>
+          <li class="step"><span class="step-n">3</span>При необходимости предложить переадресацию (сцен. 5.2).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.2 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc4_2')">
+      <span class="sc-id tag-new">4.2</span>
+      <span class="sc-title">Посылка ещё не доставлена / задержка</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc4_2">▶</span>
+    </div>
+    <div class="scenario-body" id="sc4_2">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Проверить статус посылки в 1С.</li>
+          <li class="step"><span class="step-n">2</span>Сообщить клиенту актуальный статус и ожидаемые сроки доставки.</li>
+          <li class="step warn"><span class="step-n">3</span>Если задержка — объяснить причину, назвать новые сроки.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.3 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc4_3')">
+      <span class="sc-id tag-new">4.3</span>
+      <span class="sc-title">Данные получателя не совпадают с заявкой (ФЛ)</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc4_3">▶</span>
+    </div>
+    <div class="scenario-body" id="sc4_3">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>ФИО в документе клиента не совпадает с ФИО получателя в заявке.</div>
+        <div class="combos"><span class="combo combo-fl">ФЛ-получатель</span></div>
+        <ul class="steps">
+          <li class="step err"><span class="step-n">!</span>Отказать в выдаче посылки.</li>
+          <li class="step"><span class="step-n">1</span>Объяснить клиенту причину отказа.</li>
+          <li class="step"><span class="step-n">2</span>Предложить варианты: доверенность от получателя, уточнение данных у отправителя.</li>
+        </ul>
+        <div class="todo">✏️ Уточнить: возможна ли выдача по доверенности для ФЛ и какая форма доверенности принимается?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.4 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc4_4')">
+      <span class="sc-id tag-new">4.4</span>
+      <span class="sc-title">Получение представителем ЮЛ по доверенности</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc4_4">▶</span>
+    </div>
+    <div class="scenario-body" id="sc4_4">
+      <div class="body-inner">
+        <div class="combos"><span class="combo combo-ul">ЮЛ-получатель</span></div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Запросить доверенность (разовую или копию общей/специальной) + документ, удостоверяющий личность представителя.</li>
+          <li class="step"><span class="step-n">2</span>Проверить соответствие данных в доверенности данным заявки.</li>
+          <li class="step ok"><span class="step-n">3</span>Если всё соответствует — выдать посылку, оставить копию доверенности в ПВЗ.</li>
+          <li class="step err"><span class="step-n">!</span>Если доверенности нет или данные не совпадают — отказать.</li>
+        </ul>
+        <div class="todo">✏️ Уточнить: куда передаются копии доверенностей на хранение после завершения рабочего дня?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.5 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc4_5')">
+      <span class="sc-id tag-exists">4.5</span>
+      <span class="sc-title">Выдача с браком / повреждением упаковки</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc4_5">▶</span>
+    </div>
+    <div class="scenario-body" id="sc4_5">
+      <div class="body-inner">
+        <div class="condition"><strong>Важно</strong>Всегда предпринимать попытку выдачи, даже при повреждениях.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Предложить получателю принять посылку. Если отказ — перейти к сцен. 5.1.</li>
+          <li class="step"><span class="step-n">2</span>Предложить вскрыть посылку совместно.</li>
+          <li class="step warn"><span class="step-n">2а</span>Если отказ от вскрытия — выдать под расписку «От вскрытия отказался». Претензии по такому отправлению не принимаются.</li>
+          <li class="step warn"><span class="step-n">2б</span>Если есть наложенный платёж + повреждение упаковки — не взимать платёж до вскрытия.</li>
+          <li class="step"><span class="step-n">3</span>При обнаружении недостачи или порчи — составить акт в 2 экз. совместно с получателем.</li>
+          <li class="step"><span class="step-n">4</span>Один экз. акта отдать получателю, второй передать для служебной проверки.</li>
+          <li class="step ok"><span class="step-n">5</span>Если вложение в целости — акт не составляется. Получатель вносит наложенный платёж (если есть) и забирает посылку.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.6 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc4_6')">
+      <span class="sc-id tag-new">4.6</span>
+      <span class="sc-title">Получатель не может расписаться</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc4_6">▶</span>
+    </div>
+    <div class="scenario-body" id="sc4_6">
+      <div class="body-inner">
+        <div class="condition"><strong>Условие</strong>Адресат физически не может расписаться (травма руки, инвалидность и т.д.).</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Разрешается выдача под расписку постороннего лица или сотрудника ПВЗ, не задействованного в этой операции.</li>
+        </ul>
+        <div class="todo">✏️ Уточнить: нужна ли дополнительная документация при выдаче через расписку третьего лица?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.7 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc4_7')">
+      <span class="sc-id tag-new">4.7</span>
+      <span class="sc-title">Посылка с наложенным платежом — получатель отказывается платить</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc4_7">▶</span>
+    </div>
+    <div class="scenario-body" id="sc4_7">
+      <div class="body-inner">
+        <div class="combos"><span class="combo combo-fl">ФЛ-получатель</span><span class="combo combo-ul">ЮЛ-получатель</span></div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Сообщить клиенту, что до оплаты суммы наложенного платежа посылка не выдаётся.</li>
+          <li class="step"><span class="step-n">2</span>По желанию адресата — предоставить адресные данные отправителя до оплаты.</li>
+          <li class="step warn"><span class="step-n">3</span>Если клиент отказывается платить — оформить отказ от получения (сцен. 5.1).</li>
+          <li class="step"><span class="step-n">4</span>Для ЮЛ — уточнить, предусмотрен ли иной порядок оплаты по договору.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.8 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc4_8')">
+      <span class="sc-id tag-new">4.8</span>
+      <span class="sc-title">Отсутствие адресата — курьерская доставка «О-Д»</span>
+      <span class="sc-who">Курьер</span>
+      <span class="sc-chevron" id="chv-sc4_8">▶</span>
+    </div>
+    <div class="scenario-body" id="sc4_8">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Курьер связывается с логистами, фиксирует причину «Клиент, недозвон/недостук».</li>
+          <li class="step"><span class="step-n">2</span>Согласовать новые дату и время доставки с получателем.</li>
+          <li class="step"><span class="step-n">3а</span>Если дата согласована — КЦ добавляет услугу «Повторная доставка» (80% от тарифа). Курьер доставляет повторно.</li>
+          <li class="step warn"><span class="step-n">3б</span>Если в течение 7 дней согласовать не удалось — посылка уходит на склад Таборы и возвращается в ПВЗ-отправителя.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.9 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc4_9')">
+      <span class="sc-id tag-new">4.9</span>
+      <span class="sc-title">Срок хранения в ПВЗ истекает</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc4_9">▶</span>
+    </div>
+    <div class="scenario-body" id="sc4_9">
+      <div class="body-inner">
+        <div class="condition"><strong>Сроки хранения:</strong> внутренние ускоренные — 10 дней; остальные — 30 дней. Бесплатно первые 7 дней. С 8-го дня — 0,4 BYN/день (0,2 BYN/день для возвратов).</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Система 1С автоматически отслеживает срок хранения.</li>
+          <li class="step warn"><span class="step-n">2</span>С 8-го дня начисляется плата за хранение — добавить в заявку при выдаче.</li>
+          <li class="step"><span class="step-n">3</span>По заявлению адресата или отправителя срок может быть продлён до 60 дней (30 дней для ускоренной почты) за доп. плату.</li>
+          <li class="step err"><span class="step-n">4</span>По истечении срока — начать процедуру возврата отправителю (сцен. 5.1).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ЭТАП 5: ВОЗВРАТ ===== -->
+
+<div class="stage" data-stage="s5">
+  <div class="stage-header">
+    <span class="stage-num">Этап 5</span>
+    <span class="stage-title">Возвраты и изменения</span>
+    <span class="stage-count">5 сценариев</span>
+  </div>
+
+  <!-- 5.1 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc5_1')">
+      <span class="sc-id tag-exists">5.1</span>
+      <span class="sc-title">Отказ получателя от посылки в ПВЗ</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc5_1">▶</span>
+    </div>
+    <div class="scenario-body" id="sc5_1">
+      <div class="body-inner">
+        <div class="condition"><strong>Способы отказа:</strong> лично в ПВЗ (письменно) или по телефону.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Получатель делает отметку об отказе на отправлении или квитанции выдачи, ставит подпись.</li>
+          <li class="step warn"><span class="step-n">1а</span>Если отказывается делать отметку — сотрудник ПВЗ делает её сам. При отказе по телефону — зафиксировать запись разговора, сделать отметку.</li>
+          <li class="step"><span class="step-n">2</span>Внести изменения в 1С: зафиксировать отправителя как получателя.</li>
+          <li class="step"><span class="step-n">3</span>Добавить услуги «Возврат» (50% от тарифа) и «Распоряжение». Убрать «Плата за наложенный платёж».</li>
+          <li class="step"><span class="step-n">4</span>Оплата с получателя не взимается. Расходы на возврат несёт отправитель.</li>
+          <li class="step ok"><span class="step-n">5</span>Посылка уходит на Таборы и возвращается в ПВЗ-отправителя.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5.2 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc5_2')">
+      <span class="sc-id tag-exists">5.2</span>
+      <span class="sc-title">Переадресация посылки</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc5_2">▶</span>
+    </div>
+    <div class="scenario-body" id="sc5_2">
+      <div class="body-inner">
+        <div class="condition"><strong>Инициаторы:</strong> отправитель или получатель меняют адрес ПВЗ или способ доставки (О-О → О-Д).</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Внести изменения в заявку в 1С (новый адрес / ПВЗ назначения / способ доставки).</li>
+          <li class="step"><span class="step-n">2</span>Добавить услугу «Переадресация» (100% от тарифа пересылки) и «Распоряжение».</li>
+          <li class="step warn"><span class="step-n">3</span>При смене О-О → О-Д стоимость не пересчитывается в меньшую сторону.</li>
+          <li class="step"><span class="step-n">4</span>Принять оплату.</li>
+          <li class="step ok"><span class="step-n">5</span>Посылка возвращается на Таборы и отправляется по новому адресу. Срок пересылки — от даты изменения.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5.3 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc5_3')">
+      <span class="sc-id tag-exists">5.3</span>
+      <span class="sc-title">Распоряжение отправителя / получателя (прочие изменения)</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc5_3">▶</span>
+    </div>
+    <div class="scenario-body" id="sc5_3">
+      <div class="body-inner">
+        <div class="condition"><strong>Виды распоряжений:</strong> вручить другому лицу; продлить срок хранения; выдать без взимания наложенного платежа; изменить сумму наложенного платежа; запрет/разрешение вручения конкретному лицу.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Внести соответствующие изменения в заявку 1С.</li>
+          <li class="step"><span class="step-n">2</span>Добавить услугу «Распоряжение».</li>
+          <li class="step"><span class="step-n">3</span>Принять оплату.</li>
+          <li class="step ok"><span class="step-n">4</span>Выдача по стандартному этапу.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5.4 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc5_4')">
+      <span class="sc-id tag-new">5.4</span>
+      <span class="sc-title">Адресат умер / не проживает по указанному адресу</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc5_4">▶</span>
+    </div>
+    <div class="scenario-body" id="sc5_4">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Зафиксировать причину невозможности вручения.</li>
+          <li class="step"><span class="step-n">2</span>Инициировать возврат отправителю (добавить услугу «Возврат»).</li>
+          <li class="step warn"><span class="step-n">3</span>Если адрес отправителя не указан на посылке — передать в нерозданные.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5.5 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc5_5')">
+      <span class="sc-id tag-new">5.5</span>
+      <span class="sc-title">Отправитель — ЮЛ отказывается получать возвращённую посылку</span>
+      <span class="sc-who">Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc5_5">▶</span>
+    </div>
+    <div class="scenario-body" id="sc5_5">
+      <div class="body-inner">
+        <div class="combos"><span class="combo combo-ul">ЮЛ-отправитель</span></div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1а</span>Если предъявлена претензия — составить с отправителем, передать на этап «Работа с претензиями».</li>
+          <li class="step warn"><span class="step-n">1б</span>Если отказ без претензии — упаковать и передать в нерозданные. Далее — этап «Хранение нерозданных».</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ЭТАП 6: ХРАНЕНИЕ ===== -->
+
+<div class="stage" data-stage="s6">
+  <div class="stage-header">
+    <span class="stage-num">Этап 6</span>
+    <span class="stage-title">Хранение нерозданных посылок</span>
+    <span class="stage-count">3 сценария</span>
+  </div>
+
+  <!-- 6.1 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc6_1')">
+      <span class="sc-id tag-new">6.1</span>
+      <span class="sc-title">Обнаружение запрещённых к пересылке предметов при вскрытии</span>
+      <span class="sc-who">Комиссия склада</span>
+      <span class="sc-chevron" id="chv-sc6_1">▶</span>
+    </div>
+    <div class="scenario-body" id="sc6_1">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step err"><span class="step-n">!</span>Изъять посылку из объекта незамедлительно.</li>
+          <li class="step"><span class="step-n">1</span>Составить акт об изъятии.</li>
+          <li class="step warn"><span class="step-n">2</span>Передать компетентным государственным органам.</li>
+          <li class="step"><span class="step-n">3</span>Направить акт отправителю и/или адресату.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6.2 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc6_2')">
+      <span class="sc-id tag-new">6.2</span>
+      <span class="sc-title">Стоимость вложений ≥ 5 базовых величин</span>
+      <span class="sc-who">Триовист (юридический отдел)</span>
+      <span class="sc-chevron" id="chv-sc6_2">▶</span>
+    </div>
+    <div class="scenario-body" id="sc6_2">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Подать в суд заявление о признании вложений бесхозяйными.</li>
+          <li class="step warn"><span class="step-n">2</span>После признания судом — передать вложения в Департамент по гуманитарной деятельности Управления делами Президента РБ.</li>
+          <li class="step"><span class="step-n">3</span>Денежные переводы — зачислить в республиканский бюджет.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6.3 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc6_3')">
+      <span class="sc-id tag-new">6.3</span>
+      <span class="sc-title">Поступление заявления о розыске хранящейся посылки</span>
+      <span class="sc-who">Сотрудник ПВЗ / склад</span>
+      <span class="sc-chevron" id="chv-sc6_3">▶</span>
+    </div>
+    <div class="scenario-body" id="sc6_3">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Проверить наличие посылки в зоне хранения по заявлению.</li>
+          <li class="step ok"><span class="step-n">2</span>Если найдена — выдать адресату или отправителю с взиманием платы за хранение по тарифам.</li>
+          <li class="step warn"><span class="step-n">3</span>Если не найдена — начать процедуру по претензии (утрата).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ЭТАП 7: ПРЕТЕНЗИИ ===== -->
+
+<div class="stage" data-stage="s7">
+  <div class="stage-header">
+    <span class="stage-num">Этап 7</span>
+    <span class="stage-title">Работа с претензиями и инцидентами</span>
+    <span class="stage-count">5 сценариев</span>
+  </div>
+
+  <!-- 7.1 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc7_1')">
+      <span class="sc-id tag-exists">7.1</span>
+      <span class="sc-title">Утрата посылки</span>
+      <span class="sc-who">Триовист / специалист по претензиям</span>
+      <span class="sc-chevron" id="chv-sc7_1">▶</span>
+    </div>
+    <div class="scenario-body" id="sc7_1">
+      <div class="body-inner">
+        <div class="condition"><strong>Срок подачи претензии:</strong> 6 месяцев со дня подачи отправления.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Пользователь подаёт письменную претензию с документом, квитанцией и описанием вложения.</li>
+          <li class="step"><span class="step-n">2</span>Зарегистрировать и провести служебную проверку.</li>
+          <li class="step warn"><span class="step-n">3</span>Без объявленной ценности — выплата 0,1 БВ. С объявленной ценностью — выплата суммы ОЦ + плата за пересылку.</li>
+          <li class="step"><span class="step-n">4</span>ФЛ — наличные или на карту по письменному заявлению. ЮЛ — перевод на расчётный счёт.</li>
+          <li class="step ok"><span class="step-n">5</span>Если посылка найдена после выплаты — вручить адресату, взыскать выплаченную сумму.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.2 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc7_2')">
+      <span class="sc-id tag-exists">7.2</span>
+      <span class="sc-title">Порча / повреждение вложения</span>
+      <span class="sc-who">Триовист / специалист по претензиям</span>
+      <span class="sc-chevron" id="chv-sc7_2">▶</span>
+    </div>
+    <div class="scenario-body" id="sc7_2">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Принять претензию, зарегистрировать, провести служебную проверку.</li>
+          <li class="step"><span class="step-n">2а</span>Порча всего вложения с ОЦ → выплата суммы ОЦ + плата за пересылку.</li>
+          <li class="step"><span class="step-n">2б</span>Порча части с описью → выплата стоимости испорченной части по описи.</li>
+          <li class="step warn"><span class="step-n">2в</span>Порча части без описи → выплата пропорционально весу испорченной части.</li>
+          <li class="step"><span class="step-n">3</span>Если пользователь готов использовать повреждённое вложение — размер возмещения может быть уменьшен по согласованию.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.3 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc7_3')">
+      <span class="sc-id tag-exists">7.3</span>
+      <span class="sc-title">Нарушение сроков пересылки</span>
+      <span class="sc-who">Триовист</span>
+      <span class="sc-chevron" id="chv-sc7_3">▶</span>
+    </div>
+    <div class="scenario-body" id="sc7_3">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Принять претензию с подтверждением дат (оттиски штемпелей).</li>
+          <li class="step warn"><span class="step-n">2</span>Неустойка: 1% от платы за пересылку за каждый день задержки.</li>
+          <li class="step"><span class="step-n">3</span>Ответить на претензию: 15 дней (в пределах нас. пункта) / 30 дней (за пределы).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.4 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc7_4')">
+      <span class="sc-id tag-new">7.4</span>
+      <span class="sc-title">Триовист освобождается от ответственности</span>
+      <span class="sc-who">Специалист по претензиям</span>
+      <span class="sc-chevron" id="chv-sc7_4">▶</span>
+    </div>
+    <div class="scenario-body" id="sc7_4">
+      <div class="body-inner">
+        <div class="condition"><strong>Основания для отказа в выплате:</strong> форс-мажор; нарушение обязанностей пользователем; упаковка не соответствовала характеру вложения; отправление выдано с соблюдением всех требований; вложение изъято по законодательству.</div>
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>Провести служебную проверку, зафиксировать основание для отказа.</li>
+          <li class="step"><span class="step-n">2</span>Подготовить письменный мотивированный ответ на претензию в установленные сроки.</li>
+          <li class="step warn"><span class="step-n">3</span>Направить ответ пользователю.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.5 -->
+
+  <div class="scenario">
+    <div class="scenario-header" onclick="toggle('sc7_5')">
+      <span class="sc-id tag-new">7.5</span>
+      <span class="sc-title">Наложенный платёж — выплата отправителю</span>
+      <span class="sc-who">Бухгалтерия / Сотрудник ПВЗ</span>
+      <span class="sc-chevron" id="chv-sc7_5">▶</span>
+    </div>
+    <div class="scenario-body" id="sc7_5">
+      <div class="body-inner">
+        <ul class="steps">
+          <li class="step"><span class="step-n">1</span>После получения суммы НП от получателя — система фиксирует поступление.</li>
+          <li class="step warn"><span class="step-n">2</span>Триовист перечисляет сумму НП отправителю в согласованные сроки.</li>
+          <li class="step"><span class="step-n">3</span>ЮЛ — перевод на расчётный счёт согласно договору. ФЛ — порядок уточняется.</li>
+        </ul>
+        <div class="todo">✏️ Уточнить: частота перечислений НП отправителям (ежедневно/еженедельно?) и кто отвечает за это в Триовисте.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- /content -->
+
+<script>
+function toggle(id) {
+  const body = document.getElementById(id);
+  const chv = document.getElementById('chv-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (chv) chv.classList.toggle('open', !isOpen);
+}
+
+function filterAll() {
+  document.querySelectorAll('.stage').forEach(s => s.style.display = '');
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn')[0].classList.add('active');
+}
+
+function filterStage(stageId) {
+  document.querySelectorAll('.stage').forEach(s => {
+    s.style.display = s.dataset.stage === stageId ? '' : 'none';
+  });
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
